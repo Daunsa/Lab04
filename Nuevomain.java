@@ -95,6 +95,10 @@ public class Nuevomain {
                 System.out.println("Ingrese el dni de la persona");
                 String dni =sc.next();
                 paquetitos[j] = new Paquete(j, fecha, peso, direccion, costo, nombre, dni, numero);
+                if (i != 10) {
+                    personitas[i] = new Persona_paquete(dni, nombre, numero);
+                }
+                i+=1;
             }
             
         }
@@ -107,9 +111,11 @@ public class Nuevomain {
         System.out.println("Ingrese la fecha de entrega");
         String fecha = sc.next();
         for (int k = 0; k < paquetitos.length; k++) {
-            if (paquetitos[k].getId() == id) {
-                paquetitos[k].setFecha_ent(fecha);
-                paquetitos[k].setEstado(true);
+            if (paquetitos[k] != null) {
+                if (paquetitos[k].getId() == id) {
+                    paquetitos[k].setFecha_ent(fecha);
+                    paquetitos[k].setEstado(true);
+                }
             }
         }
     }
