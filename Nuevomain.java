@@ -17,10 +17,11 @@ public class Nuevomain {
             System.out.println("4) Mostrar paquetes con sierta cantidad de peso");
             System.out.println("5) Mostrar paquetes pendiente de envio");
             System.out.println("6) Mostrar datos de persona al mostrar datos del paquete");
+            System.out.println("7) Salir");
             int opcion = sc.nextInt();
             switch(opcion){
                 case 1:
-                    Registrar_persona(lista_personas, sc );
+                    Registrar_persona(lista_personas, sc);
                     break;
                 case 2:
                     Registrar_paquete(lista_paquetes, sc, lista_personas);
@@ -35,7 +36,7 @@ public class Nuevomain {
                     Paquetes_no_enviados(lista_paquetes);
                     break;
                 case 6:
-                    System.out.println("");
+                    Ver_personas(lista_paquetes, sc);
                     break;
                 case 7:
                     estado = false;
@@ -47,7 +48,7 @@ public class Nuevomain {
     }
     
     public static void Registrar_persona(Persona_paquete[] personitas, Scanner sc){
-        if (i == 10) {
+        if (i != 10) {
             System.out.println("Ingrese el nombre de la persona");
             String nombre =sc.next();
             System.out.println("Ingrese el numero telefonico de la persona");
@@ -60,30 +61,33 @@ public class Nuevomain {
     }
     
     public static void Registrar_paquete(Paquete[] paquetitos, Scanner sc, Persona_paquete[] personitas){
-        if (j == 20) {
+        if (j != 20) {
             System.out.println("Ingrese la fecha en que se dejo el paquete");
             String fecha = sc.next();
             System.out.println("Ingrese el peso del paquete");
             double peso = sc.nextDouble();
-            System.out.println("Ingrese la diraccion de entega");
+            System.out.println("Ingrese la direccion de entega");
             String direccion = sc.next();
             System.out.println("Ingrese el costo de entrega");
             double costo = sc.nextDouble();
             System.out.println("Hora de ingresar los datos de la persona, ¿La persona ya existe?");
-            if (true) {
-                System.out.println("Ingrese el dni de la persona");
+            String respuesta = sc.next();
+            if (respuesta.contentEquals("Si")||respuesta.contentEquals("si")) {
                 System.out.println("Ingrese el dni de la persona");
                 String dni =sc.next();
                 String nombre = "";
                 String numero = "";
                 for (int k = 0; k < personitas.length; k++) {
-                    if (personitas[k].getDni().equals(dni)) {
-                        nombre = personitas[k].getNombre();
-                        numero= personitas[k].getCelular();
+                    if (personitas[k] != null) {
+                        if (personitas[k].getDni().equals(dni)) {
+                            nombre = personitas[k].getNombre();
+                            numero= personitas[k].getCelular();
+                        }
                     }
+                    
                 }
                 paquetitos[j] = new Paquete(j, fecha, peso, direccion, costo, nombre, dni, numero);
-            }else{
+            }else if(respuesta.contentEquals("No")||respuesta.contentEquals("no")){
                 System.out.println("Ingrese el nombre de la persona");
                 String nombre =sc.next();
                 System.out.println("Ingrese el numero telefonico de la persona");
@@ -114,22 +118,39 @@ public class Nuevomain {
         System.out.println("Ingrese el umbral minimo de pesos");
         double peso = sc.nextDouble();
         for (int k = 0; k < paquetitos.length; k++) {
-            if (paquetitos[k].getId() >= peso) {
-                System.out.println("Id de paquete "+paquetitos[k].getId());
-                System.out.println("Fecha de recepcion "+paquetitos[k].getFecha_ent());              
-                System.out.println("costo "+paquetitos[k].getCosto());
-                System.out.println("");
-            }
+            if (paquetitos[k] != null) {
+                if (paquetitos[k].getPeso()>= peso) {
+                    System.out.println("Id de paquete "+paquetitos[k].getId());
+                    System.out.println("Fecha de recepcion "+paquetitos[k].getFecha_ent()); 
+                    System.out.println("costo "+paquetitos[k].getCosto());
+                    System.out.println("");
+                }
+            }            
         }
     }
     
     public static void Paquetes_no_enviados(Paquete[] paquetitos){
         for (int k = 0; k < paquetitos.length; k++) {
-            if (paquetitos[k].isEstado() != true) {
-                System.out.println("Id de paquete "+paquetitos[k].getId());
-                System.out.println("Fecha de recepcion "+paquetitos[k].getFecha_ent());              
-                System.out.println("costo "+paquetitos[k].getCosto());
-                System.out.println("");
+            if (paquetitos[k] != null) {
+                if (paquetitos[k].isEstado() != true) {
+                    System.out.println("Id de paquete: "+paquetitos[k].getId());
+                    System.out.println("Fecha de recepcion: "+paquetitos[k].getFecha_ent());
+                    System.out.println("costo: "+paquetitos[k].getCosto());
+                    System.out.println("");
+                }
+            }
+        }
+    }
+    public static void Ver_personas(Paquete[] paquetitos, Scanner sc){
+        System.out.println("Ingrese el id del paquete que desea averiguar la persona");
+        int id = sc.nextInt();
+        for (int k = 0; k < paquetitos.length; k++) {
+            if (paquetitos[k] != null) {
+                if (paquetitos[k].getId() == id) {
+                    System.out.println("Nombre: "+paquetitos[k].getPersona().getNombre());
+                    System.out.println("Dni: "+paquetitos[k].getPersona().getDni());
+                    System.out.println("Celular: "+paquetitos[k].getPersona().getCelular());
+                }
             }
         }
     }
